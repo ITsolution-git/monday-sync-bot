@@ -2,7 +2,7 @@ const monday = require('./monday');
 
 const express = require('express');
 const app = express();
-const port = 2800;
+const port = process.env.PORT || 2800;
 const _ = require('lodash');
 var bodyParser   = require('body-parser');
 
