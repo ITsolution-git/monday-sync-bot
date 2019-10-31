@@ -1,0 +1,25 @@
+{
+  "name": "monday",
+  "version": "1.0.0",
+  "description": "Monday.com Initiatives handler",
+  "main": "index.js",
+  "scripts": {
+    "init": "ENV=init node index.js",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "monday"
+  ],
+  "author": "Andy",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "lodash": "^4.17.15"
+  },
+  "engines": {
+    "node": "10.x"
+  }
+}
