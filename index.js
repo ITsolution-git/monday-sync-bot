@@ -298,7 +298,12 @@ async function start () {
     if (event.event.pulseId) {
       handlePulse(event.event.pulseId)
       .then(() => {
-        start();
+
+        setTimeout(() => { 
+          console.log('--------- WAITING----------');
+          start();
+        }, 1000 * 5);
+        
       });
     }
   }
