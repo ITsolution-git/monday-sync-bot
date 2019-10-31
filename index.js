@@ -93,7 +93,7 @@ app.use(bodyParser.json({ limit: '5mb' }));
 app.get('/', (req, res) => res.send('Status OK'))
 
 app.use('/monday-callback', async (req, res) => {
-  console.log(req.query);
+  
   if (req.body.challenge) {
     res.send(req.body);
     return
@@ -104,7 +104,7 @@ app.use('/monday-callback', async (req, res) => {
   // }
 
   
-  console.log('Event accepted -', req.body);
+  // console.log('Event accepted -', req.body);
 
   if (req.body.event) {
     const event = req.body.event;
@@ -144,8 +144,7 @@ async function handlePulse (id) {
   if (tagsV.length == 0 || !tagsV[0].value) {
     return ;
   }
-  console.log('------- Item ------- ');
-  console.log(item);
+  console.log('------- Item ------- ', item.name);
 
 
   let tags = [];
@@ -206,17 +205,17 @@ async function sycnItemInGroup(group, item) {
     
     columnValues['name'] = item.name;
     
-    console.log(columnValues, mainColumns);
+    // console.log(columnValues, mainColumns);
     // debugger
     const res = await monday.updateItem(+filteredItem[0].id, +mainBoardId, columnValues);
-      console.log('*************Finished: ', res);
+    console.log('*************Finished Update: ', res);
   } else {
     columnValues[CONNECTEDID] = item.id + '';
-    console.log(columnValues, mainColumns);
+    // console.log(columnValues, mainColumns);
     columnValues[CREATOR] = item.creator.name + ' ' + item.created_at;
     // debugger
     const res = await monday.createItem(+mainBoardId, group.group.id, item.name, columnValues)
-    console.log('*************Finished: ', res);
+    console.log('*************Finished Creation: ', res);
   }
 
   let groupItemsForStatus = await monday.getAllItemsByGroup(+mainBoardId, group.group.id, STATUS);
@@ -288,14 +287,14 @@ async function getMainGroups() {
 // })();
 
 async function start () {
-  console.log('start', eventStack);
+  // console.log('start', eventStack);
   if (eventStack.length == 0) {
     setTimeout(() => { 
       start();
     }, 1000 * 5);
   } else {
     let event = eventStack.shift();  
-    console.log('Running', event, event.event.pulseId);
+    console.log('Running', event.event.pulseId, event.event.type);
     if (event.event.pulseId) {
       handlePulse(event.event.pulseId)
       .then(() => {
