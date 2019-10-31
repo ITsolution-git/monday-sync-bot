@@ -199,6 +199,7 @@ async function sycnItemInGroup(group, item) {
   const filteredItem = groupItems.filter(item => item.group.id === group.group.id);
 
   let columnValues = calcColumnValue(item.column_values);
+
   if (filteredItem.length > 0) {
     columnValues[CONNECTEDID] = item.id + '';
     columnValues[CREATOR] = item.creator.name + ' ' + item.created_at;
@@ -207,6 +208,7 @@ async function sycnItemInGroup(group, item) {
     
     // console.log(columnValues, mainColumns);
     // debugger
+    console.log('Updating', filteredItem[0].id, columnValues);
     const res = await monday.updateItem(+filteredItem[0].id, +mainBoardId, columnValues);
     console.log('*************Finished Update: ', res);
   } else {
@@ -214,6 +216,7 @@ async function sycnItemInGroup(group, item) {
     // console.log(columnValues, mainColumns);
     columnValues[CREATOR] = item.creator.name + ' ' + item.created_at;
     // debugger
+    console.log('Creating', item.name, columnValues);
     const res = await monday.createItem(+mainBoardId, group.group.id, item.name, columnValues)
     console.log('*************Finished Creation: ', res);
   }
