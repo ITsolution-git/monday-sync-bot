@@ -3,6 +3,8 @@ const monday = require('./monday');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 2800;
+console.log('PORT', process.env.PORT);
+
 const _ = require('lodash');
 var bodyParser   = require('body-parser');
 
