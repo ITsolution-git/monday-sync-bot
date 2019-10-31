@@ -11,6 +11,7 @@ var bodyParser   = require('body-parser');
 
 const COM_INIT_BOARD_NAME = 'Company Initiatives';
 const CONNECTEDID = 'text7';
+const STATUS = 'status3';
 const CREATOR = 'text';
 
 const eventStack = [];
@@ -160,13 +161,12 @@ async function handlePulse (id) {
   await getMainGroups();
 
   const mainGroupTags = mainGroups.map(g => g.tag);
-  tags.map(tag => {
-    let index = mainGroupTags.indexOf(tag);
-
+  for(let tagI = 0; tagI < tags.length; tagI ++) {
+    let index = mainGroupTags.indexOf(tags[tagI]);
     if (index != -1) {
-      sycnItemInGroup(mainGroups[index], item);
+      await sycnItemInGroup(mainGroups[index], item);
     }
-  })
+  }
 }
 
 function calcColumnValue(columnValues) {
@@ -209,15 +209,28 @@ async function sycnItemInGroup(group, item) {
     console.log(columnValues, mainColumns);
     // debugger
     const res = await monday.updateItem(+filteredItem[0].id, +mainBoardId, columnValues);
-      console.log('Finished: ', res);
+      console.log('*************Finished: ', res);
   } else {
     columnValues[CONNECTEDID] = item.id + '';
     console.log(columnValues, mainColumns);
     columnValues[CREATOR] = item.creator.name + ' ' + item.created_at;
     // debugger
     const res = await monday.createItem(+mainBoardId, group.group.id, item.name, columnValues)
-    console.log('Finished: ', res);
+    console.log('*************Finished: ', res);
   }
+
+  let groupItemsForStatus = await monday.getAllItemsByGroup(+mainBoardId, group.group.id, STATUS);
+  
+  let completedItems = groupItemsForStatus.filter(item => {
+    try {
+      return JSON.parse(item.column_values[0].value).index === 4;
+    } catch(err) {
+      return false
+    }
+  });
+
+  const newGroupName = group.group.title.split('@')[0] + `(${completedItems.length}/${groupItemsForStatus.length})`;
+
 }
 
 async function getInitiativesBoardId() {

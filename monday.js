@@ -195,34 +195,6 @@ module.exports.createItem = function (boardId, groupId, itemName, customFields) 
   })
 }
 
-module.exports.createItem = function (boardId, groupId, itemName, customFields) {
-  return axiosQuery({
-    query: `
-    mutation ($boardId: Int!, $groupId: String!, $itemName: String!, $columnValues: JSON!) {
-      create_item (
-      board_id: $boardId,
-      group_id: $groupId,
-      item_name: $itemName,
-      column_values: $columnValues
-      ) {
-        id
-      }
-    }
-    `,
-    variables: {
-      boardId: boardId,
-      groupId: groupId,
-      itemName: itemName,
-      columnValues: JSON.stringify(customFields)
-    },
-  }).then(res => {
-    return res.data.data;
-  }).catch(err => {
-    console.log(err);
-    return [];
-  })
-}
-
 module.exports.updateItem = function (itemId, boardId, customFields) {
   return axiosQuery({
     query: `
@@ -243,6 +215,35 @@ module.exports.updateItem = function (itemId, boardId, customFields) {
     },
   }).then(res => {
     return res.data.data;
+  }).catch(err => {
+    console.log(err);
+    return [];
+  })
+}
+
+
+module.exports.getAllItemsByGroup = function (boardId, groupId, statusFieldName) {
+  return axiosQuery({
+    query: `
+    query {
+      boards (ids: ${boardId}, limit: 100) {
+        id,
+
+        groups (ids: "${groupId}") {
+          id,
+          title,
+          items {
+            id,
+            column_values (ids: "${statusFieldName}") {
+              value
+            }
+          }
+        }
+      }
+    }
+  `,
+  }).then(res => {
+    return res.data.data.boards[0].groups[0].items;
   }).catch(err => {
     console.log(err);
     return [];
