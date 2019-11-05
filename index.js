@@ -86,7 +86,7 @@ const allowedColumns = [{
   nameT: 'status',  // to target
   key: (column)=>{
     try {
-      return column.label;
+      return column.text;
     } catch(err) {
       return null;
     }
@@ -186,6 +186,10 @@ function calcColumnValue(columnValues) {
   allowedColumns.map(column => {
     let mainColumn = _.find(mainColumns, (item) => item.title.toLowerCase() == column.nameS);
     let columnValue = _.find(columnValues, (item) => item.title.toLowerCase() == column.nameT);
+    console.log('AAAA');
+    console.log(mainColumn);
+    console.log(columnValue);
+    console.log('AAAA');
     if (!mainColumn || !columnValue) {
       return ;
     }
