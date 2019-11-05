@@ -182,7 +182,7 @@ function calcColumnValue(columnValues) {
   
   
   let resColumnValues = {};
-  console.log('calcColumnValue: ', JSON.stringify(columnValues));
+  console.log('calcColumnValue: start', JSON.stringify(columnValues));
   allowedColumns.map(column => {
     let mainColumn = _.find(mainColumns, (item) => item.title.toLowerCase() == column.nameS);
     let columnValue = _.find(columnValues, (item) => item.title.toLowerCase() == column.nameT);
@@ -197,7 +197,7 @@ function calcColumnValue(columnValues) {
     }
   });
   
-  console.log(resColumnValues);
+  console.log('calcColumnValue: end', resColumnValues);
   return resColumnValues;
 }
 
