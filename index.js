@@ -81,6 +81,16 @@ const allowedColumns = [{
       return null;
     }
   }
+}, {
+  nameS: 'text status',  // from source
+  nameT: 'status',  // to target
+  key: (column)=>{
+    try {
+      return column.label;
+    } catch(err) {
+      return null;
+    }
+  }
 }];
 
 let mainBoardId = '';
@@ -172,6 +182,7 @@ function calcColumnValue(columnValues) {
   
   
   let resColumnValues = {};
+  console.log('calcColumnValue: ', JSON.stringify(columnValues));
   allowedColumns.map(column => {
     let mainColumn = _.find(mainColumns, (item) => item.title.toLowerCase() == column.nameS);
     let columnValue = _.find(columnValues, (item) => item.title.toLowerCase() == column.nameT);
@@ -179,12 +190,14 @@ function calcColumnValue(columnValues) {
       return ;
     }
 
+
     let actualValue = column.key(columnValue);
     if (actualValue) {
       resColumnValues[mainColumn.id] = actualValue;
     }
   });
   
+  console.log(resColumnValues);
   return resColumnValues;
 }
 
